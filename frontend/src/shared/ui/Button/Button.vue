@@ -3,6 +3,7 @@
 </template>
 <style scoped>
 button {
+  width: fit-content;
   height: 40px;
   padding: 10px 15px;
   border: none;
