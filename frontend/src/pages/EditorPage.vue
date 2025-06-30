@@ -62,7 +62,13 @@ onMounted(async () => {
   localMd.value = md;
   render(localMd.value);
 
-  store.connect("ws://localhost:3000");
+  const wsUrl =
+    window.location.protocol === "https:"
+      ? "wss://markteam.site/ws/"
+      : "ws://localhost:3000";
+
+  store.connect(wsUrl);
+
   store.ws?.addEventListener("open", () => {
     store.ws!.send(JSON.stringify({ type: "join", id, name: username }));
 
