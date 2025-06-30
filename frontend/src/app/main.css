@@ -78,6 +78,7 @@ input {
   padding: 8px 15px;
   border-radius: 8px;
   height: 40px;
+  width: 100%;
 }
 
 .greyed {

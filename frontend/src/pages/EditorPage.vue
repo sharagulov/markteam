@@ -47,13 +47,27 @@ onMounted(async () => {
   store.setId(id);
 
   const username = sessionStorage.getItem("username") || "Anonymous";
-  const storedPassword = sessionStorage.getItem(`pass:${id}`);
-  if (!storedPassword) return alert("No password stored. Go back to login.");
+  const lastDocsRaw = sessionStorage.getItem("lastDocuments");
+  let hash = "";
 
-  const res = await fetch(`/api/docs/${id}/login`, {
+  try {
+    if (lastDocsRaw) {
+      const lastDocs = JSON.parse(lastDocsRaw);
+      const found = lastDocs.find((doc: any) => doc.id === id);
+      if (found) {
+        hash = found.hash;
+      }
+    }
+  } catch {
+    // ok...
+  }
+
+  if (!hash) return alert("No access hash stored. Go back to login.");
+
+  const res = await fetch(`/api/docs/${id}/access`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ password: storedPassword }),
+    body: JSON.stringify({ hash }),
   });
 
   if (res.status === 403) return alert("Forbidden");
